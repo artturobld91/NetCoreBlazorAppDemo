@@ -1,0 +1,51 @@
+﻿@page "/getcars"
+
+<PageTitle>Get Cars Data</PageTitle>
+
+@using BlazorAppDemo.Data
+@using BlazorAppDemo.Database
+@using static BlazorAppDemo.Database.SQLiteContext
+@inject GetDataFromJson getdatafromjson
+
+<h1>Get Cars Data</h1>
+
+<p>This component demonstrates fetching data from a service.</p>
+
+@if (_carsModels == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Make</th>
+                <th>Model</th>
+                <th>Year</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var car in _carsModels)
+            {
+                <tr>
+                    <td>@car.Id</td>
+                    <td>@car.make</td>
+                    <td>@car.model</td>
+                    <td>@car.year</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    private IEnumerable<CarsModels> _carsModels;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _carsModels = await getdatafromjson.ReadFromJsonFile();
+    }
+}

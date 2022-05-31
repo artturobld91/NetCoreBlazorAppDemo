@@ -1,0 +1,48 @@
+﻿@page "/pokeapi"
+@using BlazorAppDemo.Services
+@using BlazorAppDemo.DTOs
+
+<PageTitle>Get PokeAPI Data</PageTitle>
+
+@inject PokeAPIService pokeAPIService
+
+<h1>PokeAPI</h1>
+
+<p>This component demonstrates fetching data from a REST API PokeAPI service.</p>
+
+@if (_pokeAPI == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Pokemon</th>
+                <th>URL</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            @foreach (var result in _pokeAPI.results)
+            {
+                <tr>
+                    <td>@_counter.ToString()</td>
+                    <td>@result.name</td>
+                    <td>@result.url</td>
+                </tr>
+                _counter++;
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private PokeAPIDTO _pokeAPI;
+    private int _counter = 1;
+
+    protected override async Task OnInitializedAsync() => _pokeAPI = await pokeAPIService.FetchData();
+    
+}
